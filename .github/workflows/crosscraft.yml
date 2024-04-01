@@ -12,61 +12,6 @@ env:
 
 jobs:
 
-  Ubuntu:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build
-        run: |
-          sudo apt update
-          sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libasound2-dev libjack-jackd2-dev oss4-dev libpulse-dev libsdl2-dev libsdl2-mixer-dev
-          git submodule update --init --recursive
-          mkdir -p build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          make
-          cd ..
-          mv build/CrossCraft-Classic CrossCraft-Classic
-          chmod +x ./CrossCraft-Classic
-      - name: Publish artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: CrossCraft-Linux
-          path: |
-            CrossCraft-Classic
-            texturepacks/
-            LICENSE
-            README.md
-            config.cfg
-  
-  Windows:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build
-        run: |
-          git submodule update --init --recursive
-          vcpkg install sdl2 --triplet x64-windows
-          vcpkg install sdl2-mixer --triplet x64-windows
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -A x64 .
-          copy ext/zconf.h ext/zlib/zconf.h
-          cmake --build . --config Release
-          move Release\CrossCraft-Classic.exe CrossCraft-Classic.exe
-      - name: Publish artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: CrossCraft-Windows
-          path: |
-            CrossCraft-Classic.exe
-            zlib.dll
-            texturepacks\
-            LICENSE
-            README.md
-            config.cfg
-
   PSP:
     runs-on: ubuntu-latest
     container: pspdev/pspdev:latest
@@ -81,7 +26,7 @@ jobs:
       
       - name: Build
         run: |
-          git config --global --add safe.directory /__w/CrossCraft-Classic/CrossCraft-Classic
+          git config --global --add safe.directory /__w/CrossCraft-Edit/CrossCraft-Edit
           git submodule update --init --recursive
           mkdir -p build
           cd build
